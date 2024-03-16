@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="other_locations">Other City</string>
+    <string name="real_feel">Real Feel</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="search">Search</string>
+    <string name="search_title">Search City</string>
+</resources>
