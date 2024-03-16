@@ -213,6 +213,8 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                     val latitude = Math.round(location.latitude * 100.0) / 100.0
                                     val longitude = Math.round(location.longitude * 100.0) / 100.0
                                     viewModel.callWeatherApiByCoord(Coord(latitude, longitude))
+                                }else{
+                                    startLocationUpdates()
                                 }
                             }
                     }
