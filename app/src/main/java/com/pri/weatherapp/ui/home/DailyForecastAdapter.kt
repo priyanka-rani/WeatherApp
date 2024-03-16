@@ -7,12 +7,10 @@ import com.pri.weatherapp.data.model.DailyWeather
 import com.pri.weatherapp.databinding.ItemDailyForecastBinding
 import com.pri.weatherapp.utils.setDataImage
 import java.util.Calendar
-import java.util.GregorianCalendar
 
 class DailyForecastAdapter(private val data: List<DailyWeather>) :
     RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>() {
-    private var indexfor = 5
-
+    private var nextIndex = 5
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemDailyForecastBinding.inflate(
@@ -28,7 +26,7 @@ class DailyForecastAdapter(private val data: List<DailyWeather>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(indexfor)
+        holder.bind(nextIndex)
     }
 
     inner class ViewHolder(private val binding: ItemDailyForecastBinding) :
@@ -38,9 +36,10 @@ class DailyForecastAdapter(private val data: List<DailyWeather>) :
                 val item = data[i]
                 val dt = item.dtTxt.orEmpty() // dt_text.format=2020-06-26 12:00:00
                 val a = dt.trim().split(" ")
-                if (adapterPosition == data.size - 1 && a.getOrNull(1) != "12:00:00") {
+                if (i == data.size - 1 || a.getOrNull(1) == "12:00:00") {
                     val dateSplit = a.firstOrNull().orEmpty().split("-")
-                    val calendar: Calendar = GregorianCalendar(
+                    val calendar: Calendar = Calendar.getInstance()
+                    calendar.set(
                         dateSplit[0].toInt(),
                         dateSplit[1].toInt() - 1,
                         dateSplit[2].toInt()
@@ -49,36 +48,13 @@ class DailyForecastAdapter(private val data: List<DailyWeather>) :
                     val dateString = forecastDate.toString()
                     val forecastDateSplit = dateString.trim().split(" ")
                     val date =
-                        forecastDateSplit[0] + ", " + forecastDateSplit[1] + " " + forecastDateSplit[2]
+                        forecastDateSplit.getOrNull(0) + ", " + forecastDateSplit.getOrNull(1) + " " + forecastDateSplit.getOrNull(2)
                     binding.tvForecastDay.text = date
-                    val temparature = item.main?.temp ?: 0.0
-                    val temp = Math.round(temparature).toString() + "°"
+                    val temp = Math.round(item.main?.temp ?: 0.0).toString() + "°"
                     binding.tvForecastTemp.text = temp
                     val icon = item.weather?.firstOrNull()?.icon
                     binding.ivForecastIcon.setDataImage(icon)
-                    return
-                } else if (a[1] == "12:00:00") {
-                    val dateSplit = a[0].split("-".toRegex()).dropLastWhile { it.isEmpty() }
-                        .toTypedArray()
-                    val calendar: Calendar = GregorianCalendar(
-                        dateSplit[0].toInt(),
-                        dateSplit[1].toInt() - 1,
-                        dateSplit[2].toInt()
-                    )
-                    val forecastDate = calendar.time
-                    val dateString = forecastDate.toString()
-                    val forecastDateSplit =
-                        dateString.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()
-                    val date =
-                        forecastDateSplit[0] + ", " + forecastDateSplit[1] + " " + forecastDateSplit[2]
-                    binding.tvForecastDay.text = date
-                    val temparature = item.main?.temp
-                    val temp = Math.round(temparature ?: 0.0).toString() + "°"
-                    binding.tvForecastTemp.text = temp
-                    val icon = item.weather?.firstOrNull()?.icon
-                    binding.ivForecastIcon.setDataImage(icon)
-                    indexfor = i + 1
+                    nextIndex = i + 1
                     return
                 }
             }

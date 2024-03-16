@@ -130,8 +130,11 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         val icons = weather?.icon
                         val currentDate = Date()
                         val dateString = currentDate.toString()
-                        val dateSplit = dateString.trim().split(" ".toRegex())
-                        val date = dateSplit[0] + ", " + dateSplit[1] + " " + dateSplit[2]
+                        val dateSplit = dateString.trim().split(" ")
+                        val date =
+                            dateSplit.getOrNull(0) + ", " + dateSplit.getOrNull(1) + " " + dateSplit.getOrNull(
+                                2
+                            )
                         val main = todayWeather?.main
                         val temparature = main?.temp ?: 0.0
                         val temp = Math.round(temparature).toString() + "°C"
@@ -151,7 +154,6 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             tvHumidity.text = hum
                             tvRealfeel.text = feelsValue
                             tvWind.text = windValue
-                            swipeRefreshLayout.isRefreshing = false
                             progressBar.isVisible = false
                         }
                     }
@@ -160,12 +162,12 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         resource.message?.let { message ->
                             showError(message)
                         }
-                        binding.swipeRefreshLayout.isRefreshing = false
                         binding.progressBar.isVisible = false
                     }
 
                     Status.LOADING -> {
-                        /* no-op */
+                        binding.progressBar.isVisible = true
+                        binding.swipeRefreshLayout.isRefreshing = false
                     }
                 }
 
@@ -213,7 +215,7 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                     val latitude = Math.round(location.latitude * 100.0) / 100.0
                                     val longitude = Math.round(location.longitude * 100.0) / 100.0
                                     viewModel.callWeatherApiByCoord(Coord(latitude, longitude))
-                                }else{
+                                } else {
                                     startLocationUpdates()
                                 }
                             }
@@ -227,7 +229,6 @@ class HomeFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun weatherByCityName(city: String) {
-        binding.progressBar.isVisible = true
         viewModel.callCurrentWeatherByCity(city)
     }
 
