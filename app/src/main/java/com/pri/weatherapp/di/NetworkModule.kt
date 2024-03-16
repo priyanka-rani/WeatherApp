@@ -2,6 +2,7 @@ package com.pri.weatherapp.di
 
 import com.google.gson.GsonBuilder
 import com.pri.weatherapp.BuildConfig
+import com.pri.weatherapp.api.ApiInfo
 import com.pri.weatherapp.api.ApiService
 import dagger.Module
 import dagger.Provides
@@ -44,7 +45,7 @@ class NetworkModule {
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(ApiInfo.baseUrl)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
 
