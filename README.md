@@ -22,4 +22,4 @@ The architecture of this application relies and complies with the following poin
 * [Android KTX](https://developer.android.com/kotlin/ktx) which helps to write more concise, idiomatic Kotlin code.
 
 ## Installation
-Weather App requires a minimum API level of 24. Clone the repository. You will need an API key i.e. `API_KEY` from [Open Weather](https://openweathermap.org/) to request data. If you don’t already have an account,
+Weather App requires a minimum API level of 24. Clone the repository. You will need an API key i.e. `API_KEY` from [Open Weather](https://openweathermap.org/) to request data.
